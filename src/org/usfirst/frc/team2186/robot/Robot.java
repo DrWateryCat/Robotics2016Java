@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team2186.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -19,24 +20,20 @@ public class Robot extends IterativeRobot {
      */
 	Drive d = Drive.getInstance();
 	Joystick j = new Joystick(0);
+	Compressor c;
+	MotionPath autonomous;
     public void robotInit() {
-
+    	c = new Compressor();
+    	c.start();
+    	
+    	autonomous = new MotionPath("motion.txt");
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	d.setLeft(1);
-    	d.setRight(-1);
-    	Timer.delay(5);
-    	d.shift(1);
-    	d.setLeft(0.5);
-    	d.setRight(-0.5);
-    	Timer.delay(5);
-    	d.setLeft(0);
-    	d.setRight(0);
-    	d.shift(0);
+    	autonomous.interpret();
     }
 
     /**
@@ -44,7 +41,11 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         d.setLeft(j.getAxis(Joystick.AxisType.kY));
-        d.setRight(j.getRawAxis(3));
+        if(j.getRawButton(1) && !j.getRawButton(3)) {
+        	d.shift(1);
+        } else if (j.getRawButton(3) && !j.getRawButton(1)) {
+        	d.shift(0);
+        }
     }
     
     /**

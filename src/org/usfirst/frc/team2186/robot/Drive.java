@@ -36,4 +36,9 @@ public class Drive {
 		shiftLeft(gear);
 		shiftRight(gear);
 	}
+	
+	public void set(double left, double right) {
+		setLeft(left);
+		setRight(right);
+	}
 }
