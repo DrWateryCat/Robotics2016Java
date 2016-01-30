@@ -1,4 +1,5 @@
-f 2
-h 1
-f 3
-s
+forward 2
+shift 1
+forward 3
+stop
+turn left 5
