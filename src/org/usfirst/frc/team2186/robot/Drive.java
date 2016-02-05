@@ -1,6 +1,13 @@
 package org.usfirst.frc.team2186.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Drive {
+	class DriveTypes {
+		public static final int TANK_DRIVE = 0;
+		public static final int ARCADE_DRIVE = 1;
+	}
 	private static Drive _instance = null;
 	public static Drive getInstance() {
 		if(_instance == null) {
@@ -40,5 +47,23 @@ public class Drive {
 	public void set(double left, double right) {
 		setLeft(left);
 		setRight(right);
+	}
+	
+	public void teleop(Joystick j) {
+		int driveType = (int) SmartDashboard.getNumber("DriveType", 0);
+		if(driveType == DriveTypes.TANK_DRIVE) {
+			double left = j.getRawAxis(0);
+			double right = j.getRawAxis(2);
+			
+			set(left, right);
+		} else {
+			double x = j.getRawAxis(0);
+			double y = j.getRawAxis(1);
+			
+			double left = y + x;
+			double right = y - x;
+			
+			set(left, right);
+		}
 	}
 }

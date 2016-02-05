@@ -11,7 +11,9 @@ public class MotionPath {
 	public MotionPath(String file) {
 		in = new Scanner(getClass().getResourceAsStream(file));
 	}
-	
+	/**
+	 * Call this in a loop, because this does not have a loop function embedded
+	 */
 	public void interpret() {
 		String c = in.next();
 		if(!passed) {
