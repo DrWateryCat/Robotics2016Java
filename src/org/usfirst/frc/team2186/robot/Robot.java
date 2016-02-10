@@ -4,7 +4,7 @@ package org.usfirst.frc.team2186.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Timer;    //Should this be removed? I mean, are we gonna use this here?
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
     	c = new Compressor();
     	c.start();
     	
-    	//autonomous = new MotionPath("motion.txt");
+    	autonomous = new MotionPath("motion.txt");
     	
     	SmartDashboard.putNumber("DriveType", 0);
     }
@@ -37,7 +37,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	//autonomous.interpret();
+    	autonomous.interpret();
     }
 
     /**

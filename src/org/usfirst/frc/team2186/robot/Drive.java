@@ -49,6 +49,12 @@ public class Drive {
 		setRight(right);
 	}
 	
+	//I thought this would be nice to have. --gamrguy
+	public void stop()
+	{
+		set(0, 0);
+	}
+	
 	public void teleop(Joystick j) {
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 0);
 		if(driveType == DriveTypes.TANK_DRIVE) {
