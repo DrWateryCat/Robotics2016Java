@@ -2,6 +2,7 @@
 package org.usfirst.frc.team2186.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;    //Should this be removed? I mean, are we gonna use this here?
@@ -24,6 +25,10 @@ public class Robot extends IterativeRobot {
 	Joystick driver = new Joystick(1);
 	Compressor c;
 	MotionPath autonomous;
+	
+	Launcher l = Launcher.getInstance();
+	
+	DigitalOutput ledRing;
     public void robotInit() {
     	c = new Compressor();
     	c.start();
@@ -31,6 +36,9 @@ public class Robot extends IterativeRobot {
     	autonomous = new MotionPath("motion.txt");
     	
     	SmartDashboard.putNumber("DriveType", 0);
+    	SmartDashboard.putBoolean("Rev", false);
+    	ledRing = new DigitalOutput(0);
+    	ledRing.set(true);
     }
 
     /**
@@ -55,6 +63,12 @@ public class Robot extends IterativeRobot {
     		d.shift(1);
     	} else {
     		d.shift(0);
+    	}
+    	
+    	if(driver.getRawButton(4)) {     //change button later
+    		SmartDashboard.putBoolean("Rev", true);
+    	} else {
+    		SmartDashboard.putBoolean("Rev", false);
     	}
     }
     

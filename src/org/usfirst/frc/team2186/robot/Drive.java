@@ -19,8 +19,8 @@ public class Drive {
 	ShiftingSpeedController m_left;
 	ShiftingSpeedController m_right;
 	private Drive() {
-		m_left = new ShiftingSpeedController(0, 1, new int[]{0, 1, 2});
-		m_right = new ShiftingSpeedController(2, 3, new int[]{3, 4, 5});
+		m_left = new ShiftingSpeedController(RobotMap.DriveTrain.LEFT_FORWARD, RobotMap.DriveTrain.LEFT_REVERSE, RobotMap.DriveTrain.LEFT_ENCODER , RobotMap.DriveTrain.LEFT);
+		m_right = new ShiftingSpeedController(RobotMap.DriveTrain.RIGHT_FORWARD, RobotMap.DriveTrain.RIGHT_REVERSE, RobotMap.DriveTrain.RIGHT_ENCODER, RobotMap.DriveTrain.RIGHT);
 	}
 	
 	public void setRight(double val) {

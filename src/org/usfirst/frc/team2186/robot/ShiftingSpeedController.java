@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class ShiftingSpeedController {
 	public static class Gear {
@@ -12,10 +13,11 @@ public class ShiftingSpeedController {
 		public static final int UP = 1;
 	}
 	DoubleSolenoid m_piston;
+	Encoder m_encoder;
 	MultiSpeedController m_motorController;
 	Value m_value = Value.kOff;
 	
-	public ShiftingSpeedController(int piston_port_a, int piston_port_b, int... motor_ports) {
+	public ShiftingSpeedController(int piston_port_a, int piston_port_b, int[] encoder_ports, int... motor_ports) {
 		m_piston = new DoubleSolenoid(piston_port_a, piston_port_b);
 		ArrayList<VictorSP> motors = new ArrayList<VictorSP>();
 		for(int i = 0; i < motor_ports.length; i++) {
@@ -23,6 +25,7 @@ public class ShiftingSpeedController {
 		}
 		VictorSP[] victors = motors.toArray(new VictorSP[motors.size()]);
 		m_motorController = new MultiSpeedController(victors);
+		m_encoder = new Encoder(encoder_ports[0], encoder_ports[1]);
 	}
 	
 	public void set(double value) {
