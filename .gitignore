@@ -16,3 +16,5 @@ bin/
 *.properties
 build/
 dist/
+.classpath
+.project
