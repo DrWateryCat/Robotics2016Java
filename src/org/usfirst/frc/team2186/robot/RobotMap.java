@@ -11,7 +11,18 @@ public class RobotMap {
 		public static final int RIGHT_REVERSE = 3;
 		public static final int[] RIGHT_ENCODER = {2, 3};
 		
+		//Inches of robot movement per pulse
 		public static final double DISTANCE_PER_PULSE = 0.043;
+		
+		//Degrees of wheel movement per pulse
+		public static final double DEGREES_PER_PULSE = 1/(8*Math.PI)/DISTANCE_PER_PULSE/360;
+		
+		//Statistics
+		public static final double TURNING_CIRCUMFERENCE = 28*Math.PI;
+		public static final double INCHES_PER_TURN_DEGREE = TURNING_CIRCUMFERENCE/360;
+		
+		//How many degrees of turning movement per pulse
+		public static final double TURNING_DEGREES_PER_PULSE = (1/INCHES_PER_TURN_DEGREE)*DISTANCE_PER_PULSE;
 	}
 	
 	public static class Intake {
