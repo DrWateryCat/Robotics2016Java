@@ -49,6 +49,17 @@ public class Drive {
 		setRight(right);
 	}
 	
+	public void goDistance(double dist) {
+		double m_left_dist = 0, m_right_dist = 0;
+		
+		while(m_left_dist != dist || m_right_dist != dist) {
+			set(0.75, 0.75);
+			m_left_dist = m_left.getEncoder().getDistance();
+			m_right_dist = m_right.getEncoder().getDistance();
+		}
+		set(0, 0);
+	}
+	
 	//I thought this would be nice to have. --gamrguy
 	public void stop()
 	{

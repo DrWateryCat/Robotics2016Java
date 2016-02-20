@@ -1,0 +1,5 @@
+forward 2
+shift 1
+forward 3
+stop
+turn left 5
