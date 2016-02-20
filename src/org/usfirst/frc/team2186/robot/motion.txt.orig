@@ -1,0 +1,10 @@
+<<<<<<< HEAD
+forward 2 in
+=======
+ALIGN TIME
+forward 2
+>>>>>>> e6d4b30a8e72a4c4975b4ae8b4c7e94b1c0ddf89
+shift 1
+forward 3 in
+stop
+turn left 5 in

@@ -28,6 +28,7 @@ public class ShiftingSpeedController {
 		VictorSP[] victors = motors.toArray(new VictorSP[motors.size()]);
 		m_motorController = new MultiSpeedController(victors);
 		m_encoder = new Encoder(encoder_ports[0], encoder_ports[1]);
+		m_encoder.setDistancePerPulse(RobotMap.DriveTrain.DISTANCE_PER_PULSE);
 	}
 	
 	public void set(double value) {
