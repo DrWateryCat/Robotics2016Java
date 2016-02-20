@@ -49,21 +49,54 @@ public class Drive {
 		setRight(right);
 	}
 	
-	public void goDistance(double dist) {
+	public void goDistance(double dist, double speed) {
 		double m_left_dist = 0, m_right_dist = 0;
 		
-		while(m_left_dist != dist || m_right_dist != dist) {
+		if(dist < 0)
+		{
+			set(-speed, -speed);
+			dist = -dist;
+		}
+		else
+			set(speed, speed);
+		
+		m_left.getEncoder().reset();
+		m_right.getEncoder().reset();
+		
+		while(Math.abs(m_left_dist) <= dist || Math.abs(m_right_dist) <= dist) {
 			m_left_dist = m_left.getEncoder().getDistance();
 			m_right_dist = m_right.getEncoder().getDistance();
-			set(0.75, 0.75);
 		}
-		set(0, 0);
+		stop();
 	}
 	
-	//I thought this would be nice to have. --gamrguy
 	public void stop()
 	{
 		set(0, 0);
+	}
+	
+	public void turnAngle(double speed, double degrees)
+	{
+		if(degrees == 0)
+			return;
+		
+		//Turn right on positive angle, left on negative
+		if(degrees > 0)
+			set(speed, -speed);
+		else
+		{
+			degrees = -degrees; //can't be havin negative degrees now!
+			set(-speed, speed);
+		}
+		m_left.m_encoder.reset(); //resetti be mad nao mwahahahaha
+		m_right.m_encoder.reset();
+		
+		//just keep turnin until done turnin! looks stupid, but trust me IT ISN'T.
+		while(RobotMap.DriveTrain.TURNING_DEGREES_PER_PULSE*m_left.m_encoder.getRaw() < degrees ||
+			  RobotMap.DriveTrain.TURNING_DEGREES_PER_PULSE*m_right.m_encoder.getRaw() < degrees);
+		
+		//stop turnin.
+		stop();
 	}
 	
 	public void teleop(Joystick j) {

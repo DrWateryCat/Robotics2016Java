@@ -40,40 +40,44 @@ public class MotionPath {
 		}
 	}
 	
-	//Begin separate methods for movement. Figured these just might come in handy --gamrguy
-	public void moveForward(int time, String unit, double speed)
+	public void moveForward(int dist, String unit, double speed)
 	{
 		driveTrain.set(speed, speed);
-		if(unit.equals("sec"))
-			Timer.delay(time);
-		//else --TODO: INCHES
-		driveTrain.stop();
+		if(unit.equals("sec")){
+			driveTrain.set(speed, speed);
+			Timer.delay(dist);
+			driveTrain.stop();}
+		else
+			driveTrain.goDistance(dist, speed);
 	}
 	
-	public void moveBackward(int time, String unit, double speed)
+	public void moveBackward(int dist, String unit, double speed)
 	{
-		driveTrain.set(-speed, -speed);
-		if(unit.equals("sec"))
-			Timer.delay(time);
-		//else --TODO: INCHES
-		driveTrain.stop();
+		if(unit.equals("sec")){
+			driveTrain.set(-speed, -speed);
+			Timer.delay(dist);
+			driveTrain.stop();}
+		else
+			driveTrain.goDistance(-dist, speed);
 	}
 	
-	public void turnRight(int time, String unit, double speed)
+	public void turnRight(int dist, String unit, double speed)
 	{
-		driveTrain.set(speed, -speed);
-		if(unit.equals("sec"))
-			Timer.delay(time);
-		//else --TODO: DEGREES
-		driveTrain.stop();
+		if(unit.equals("sec")){
+			driveTrain.set(speed, -speed);
+			Timer.delay(dist);
+			driveTrain.stop();}
+		else
+			driveTrain.turnAngle(speed, dist);
 	}
 	
-	public void turnLeft(int time, String unit, double speed)
+	public void turnLeft(int dist, String unit, double speed)
 	{
-		driveTrain.set(-speed, speed);
-		if(unit.equals("sec"))
-			Timer.delay(time);
-		//else --TODO: DEGREES
-		driveTrain.stop();
+		if(unit.equals("sec")){
+			driveTrain.set(-speed, speed);
+			Timer.delay(dist);
+			driveTrain.stop();}
+		else
+			driveTrain.turnAngle(speed, -dist);
 	}
 }
