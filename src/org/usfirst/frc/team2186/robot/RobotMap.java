@@ -10,6 +10,8 @@ public class RobotMap {
 		public static final int RIGHT_FORWARD = 2;
 		public static final int RIGHT_REVERSE = 3;
 		public static final int[] RIGHT_ENCODER = {2, 3};
+		
+		public static final double DISTANCE_PER_PULSE = 0.043;
 	}
 	
 	public static class Intake {

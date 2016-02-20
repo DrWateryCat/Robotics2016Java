@@ -1,4 +1,4 @@
-ALIGN DISTANCE
+ALIGN TIME
 forward 2
 shift 1
 forward 3
