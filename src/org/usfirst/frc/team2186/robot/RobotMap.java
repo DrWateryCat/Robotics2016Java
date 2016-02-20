@@ -26,15 +26,9 @@ public class RobotMap {
 	}
 	
 	public static class Intake {
-		public static final int LEFT_MOTOR = 6;
-		public static final int RIGHT_MOTOR = 7;
+		public static final int ROLLERS = 6;
+		public static final int LINEAR = 7;
 		
-		public static final int WHEELS = 8;
-	}
-	
-	
-	public static class Launcher {
-		public static final int WHEELS = 9;
-		public static final int[] PISTON = {4, 5}; 
+		public static final int OUT_LIMIT = 4;
 	}
 }

@@ -1,14 +1,9 @@
 package org.usfirst.frc.team2186.robot;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Intake {
-
-	private VictorSP m_left; //move backwards to bring down intake
-	private VictorSP m_right; // move forwards to bring down intake
-	private VictorSP m_wheels; //move forwards to bring in ball
-	
 	private static Intake _instance;
 	public static Intake getInstance() {
 		if(_instance == null) {
@@ -18,20 +13,31 @@ public class Intake {
 		return _instance;
 	}
 	
+	VictorSP m_linear;
+	VictorSP m_rollers;
+	
+	DigitalInput out_limit;
+	
 	private Intake() {
-		m_left = new VictorSP(RobotMap.Intake.LEFT_MOTOR);
-		m_right = new VictorSP(RobotMap.Intake.RIGHT_MOTOR);
+		m_linear = new VictorSP(RobotMap.Intake.LINEAR);
+		m_rollers = new VictorSP(RobotMap.Intake.ROLLERS);
 		
-		m_wheels = new VictorSP(RobotMap.Intake.WHEELS);
+		out_limit = new DigitalInput(RobotMap.Intake.OUT_LIMIT);
 	}
 	
-	public void start(){
-		//stuff
+	public void setRollers(boolean state) {
+		if(state) {
+			m_rollers.set(0.75);
+		} else {
+			m_rollers.set(0);
+		}
 	}
 	
-	public void set(int input){
-		m_wheels.set(input);		
+	public void moveIntake() {
+		if(!out_limit.get()) {
+			m_linear.set(0.5);
+		} else {
+			m_linear.set(0);
+		}
 	}
-	
-	
 }

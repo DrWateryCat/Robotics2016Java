@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
 	Compressor c;
 	MotionPath autonomous;
 	
-	Launcher l = Launcher.getInstance();
+	Intake i = Intake.getInstance();
 	
 	DigitalOutput ledRing;
     public void robotInit() {
@@ -37,12 +37,11 @@ public class Robot extends IterativeRobot {
     	
     	SmartDashboard.putNumber("DriveType", 0);
     	SmartDashboard.putBoolean("Rev", false);
-    	ledRing = new DigitalOutput(0);
-    	ledRing.set(true);
+    	ledRing = new DigitalOutput(5);
     }
     
     public void autonomousInit() {
-    	Intake.getInstance().start();
+    	//Intake.getInstance().start();
     }
 
     /**
@@ -56,6 +55,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	ledRing.set(true);
     	d.teleop(j);
     	if(driver.getRawButton(3)) {
     		SmartDashboard.putNumber("DriveType", 1);
