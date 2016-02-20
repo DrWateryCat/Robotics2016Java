@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
 
 public class ShiftingSpeedController {
 	public static class Gear {
@@ -16,6 +17,7 @@ public class ShiftingSpeedController {
 	Encoder m_encoder;
 	MultiSpeedController m_motorController;
 	Value m_value = Value.kOff;
+	
 	
 	public ShiftingSpeedController(int piston_port_a, int piston_port_b, int[] encoder_ports, int... motor_ports) {
 		m_piston = new DoubleSolenoid(piston_port_a, piston_port_b);
@@ -42,6 +44,10 @@ public class ShiftingSpeedController {
 			break;
 		}
 		m_piston.set(m_value);
+	}
+	
+	public Encoder getEncoder() {
+		return m_encoder;
 	}
 
 }

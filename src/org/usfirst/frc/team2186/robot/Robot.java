@@ -40,6 +40,10 @@ public class Robot extends IterativeRobot {
     	ledRing = new DigitalOutput(0);
     	ledRing.set(true);
     }
+    
+    public void autonomousInit() {
+    	Intake.getInstance().start();
+    }
 
     /**
      * This function is called periodically during autonomous

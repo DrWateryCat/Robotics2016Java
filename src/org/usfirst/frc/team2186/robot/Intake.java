@@ -27,7 +27,6 @@ public class Intake {
 	
 	public void start(){
 		//stuff
-		
 	}
 	
 	public void set(int input){
