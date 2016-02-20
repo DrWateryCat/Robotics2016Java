@@ -21,17 +21,17 @@ public class MotionPath {
 		if(!passed) {
 			switch(c) {
 			case "forward":
-				moveForward(in.nextInt(), DEFAULT_SPEED);
+				moveForward(in.nextInt(), in.next(), DEFAULT_SPEED);
 				break;
 			case "shift":
 				driveTrain.shift(in.nextInt());
 				break;
 			case "reverse":
-				moveBackward(in.nextInt(), DEFAULT_SPEED);
+				moveBackward(in.nextInt(), in.next(), DEFAULT_SPEED);
 				break;
 			case "turn":
-				if (in.next().equals("left")) turnLeft(in.nextInt(), TURN_SPEED);
-				else turnRight(in.nextInt(), TURN_SPEED);
+				if (in.next().equals("left")) turnLeft(in.nextInt(), in.next(), TURN_SPEED);
+				else turnRight(in.nextInt(), in.next(), TURN_SPEED);
 				break;
 			default:    //stop. Can be anything (but should probably say "stop" for clarity)
 				driveTrain.stop();
@@ -41,31 +41,39 @@ public class MotionPath {
 	}
 	
 	//Begin separate methods for movement. Figured these just might come in handy --gamrguy
-	public void moveForward(int time, double speed)
+	public void moveForward(int time, String unit, double speed)
 	{
 		driveTrain.set(speed, speed);
-		Timer.delay(time);
+		if(unit.equals("sec"))
+			Timer.delay(time);
+		//else --TODO: INCHES
 		driveTrain.stop();
 	}
 	
-	public void moveBackward(int time, double speed)
+	public void moveBackward(int time, String unit, double speed)
 	{
 		driveTrain.set(-speed, -speed);
-		Timer.delay(time);
+		if(unit.equals("sec"))
+			Timer.delay(time);
+		//else --TODO: INCHES
 		driveTrain.stop();
 	}
 	
-	public void turnRight(int time, double speed)
+	public void turnRight(int time, String unit, double speed)
 	{
 		driveTrain.set(speed, -speed);
-		Timer.delay(time);
+		if(unit.equals("sec"))
+			Timer.delay(time);
+		//else --TODO: DEGREES
 		driveTrain.stop();
 	}
 	
-	public void turnLeft(int time, double speed)
+	public void turnLeft(int time, String unit, double speed)
 	{
 		driveTrain.set(-speed, speed);
-		Timer.delay(time);
+		if(unit.equals("sec"))
+			Timer.delay(time);
+		//else --TODO: DEGREES
 		driveTrain.stop();
 	}
 }
