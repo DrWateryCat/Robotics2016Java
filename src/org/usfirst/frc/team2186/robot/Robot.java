@@ -62,36 +62,28 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	ledRing.set(true);
     	d.teleop(j);
-    	if(driver.getRawButton(3)) {
+    	if(driver.getRawButton(3))
     		SmartDashboard.putNumber("DriveType", 1);
-    	} else {
+    	else
     		SmartDashboard.putNumber("DriveType", 0);
-    	}
     	
     	
-    	if(j.getRawButton(1)) {
+    	if(j.getRawButton(1))
     		d.shift(1);
-    	} else if(j.getRawButton(3)){
+    	else if(j.getRawButton(3))
     		d.shift(0);
-    	}
     	
-    	if(driver.getRawButton(4)) {     //change button later
+    	if(driver.getRawButton(4))     //change button later
     		SmartDashboard.putBoolean("Rev", true);
-    	} else {
+    	else
     		SmartDashboard.putBoolean("Rev", false);
-    	}
     	
-    	if(j.getRawButton(2)) {
+    	if(j.getRawButton(2))
     		i.moveIntake();
-    	} else {
-    		i.stopIntake();
-    	}
-    	
-    	if(j.getRawButton(4)) {
+    	else if (j.getRawButton(4))
     		i.reverseIntake();
-    	} else {
+    	else
     		i.stopIntake();
-    	}
     }
     
     /**
