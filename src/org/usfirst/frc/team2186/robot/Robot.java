@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
     	c = new Compressor();
     	c.start();
     	
-    	autonomous = new MotionPath("motion.txt");
+    	//autonomous = new MotionPath("motion.txt");
     	
     	SmartDashboard.putNumber("DriveType", 0);
     	SmartDashboard.putBoolean("Rev", false);
@@ -48,12 +48,17 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	autonomous.interpret();
+    	//autonomous.interpret();
+    }
+    
+    public void teleopInit() {
+    	d.shift(0);
     }
 
     /**
      * This function is called periodically during operator control
      */
+    int shift = 0;
     public void teleopPeriodic() {
     	ledRing.set(true);
     	d.teleop(j);
@@ -63,9 +68,10 @@ public class Robot extends IterativeRobot {
     		SmartDashboard.putNumber("DriveType", 0);
     	}
     	
-    	if(driver.getRawButton(1)) {
+    	
+    	if(j.getRawButton(1)) {
     		d.shift(1);
-    	} else {
+    	} else if(j.getRawButton(3)){
     		d.shift(0);
     	}
     	
@@ -73,6 +79,18 @@ public class Robot extends IterativeRobot {
     		SmartDashboard.putBoolean("Rev", true);
     	} else {
     		SmartDashboard.putBoolean("Rev", false);
+    	}
+    	
+    	if(j.getRawButton(2)) {
+    		i.moveIntake();
+    	} else {
+    		i.stopIntake();
+    	}
+    	
+    	if(j.getRawButton(4)) {
+    		i.reverseIntake();
+    	} else {
+    		i.stopIntake();
     	}
     }
     

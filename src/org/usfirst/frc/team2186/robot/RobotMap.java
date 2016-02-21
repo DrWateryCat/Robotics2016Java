@@ -27,7 +27,7 @@ public class RobotMap {
 	
 	public static class Intake {
 		public static final int ROLLERS = 6;
-		public static final int LINEAR = 7;
+		public static final int LINEAR = 8;
 		
 		public static final int OUT_LIMIT = 4;
 	}

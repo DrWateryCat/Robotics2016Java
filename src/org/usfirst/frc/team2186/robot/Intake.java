@@ -34,10 +34,14 @@ public class Intake {
 	}
 	
 	public void moveIntake() {
-		if(!out_limit.get()) {
-			m_linear.set(0.5);
-		} else {
-			m_linear.set(0);
-		}
+		m_rollers.set(0.5);
+	}
+	
+	public void stopIntake() {
+		m_rollers.set(0);
+	}
+	
+	public void reverseIntake() {
+		m_rollers.set(-0.25);
 	}
 }

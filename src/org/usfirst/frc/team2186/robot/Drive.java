@@ -102,8 +102,8 @@ public class Drive {
 	public void teleop(Joystick j) {
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 0);
 		if(driveType == DriveTypes.TANK_DRIVE) {
-			double left = j.getRawAxis(0);
-			double right = j.getRawAxis(2);
+			double left = Utils.deadzone(j.getRawAxis(1));
+			double right = -Utils.deadzone(j.getRawAxis(3));
 			
 			set(left, right);
 		} else {
