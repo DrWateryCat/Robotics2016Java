@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;    //Should this be removed? I mean, are we gonna use this here?
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -92,6 +91,18 @@ public class Robot extends IterativeRobot {
     	} else {
     		i.stopIntake();
     	}
+    	
+    	if(j.getRawButton(6)){
+    		i.setRollers(1);
+    	} else if(j.getRawButton(8)){
+    		i.setRollers(-1);
+    	} else {
+    		i.setRollers(0);
+    	}
+    }
+    
+    public void disabledInit() {
+    	i.setRollers(0);
     }
     
     /**

@@ -25,11 +25,13 @@ public class Intake {
 		out_limit = new DigitalInput(RobotMap.Intake.OUT_LIMIT);
 	}
 	
-	public void setRollers(boolean state) {
-		if(state) {
-			m_rollers.set(0.75);
+	public void setRollers(int state) {
+		if(state == 1) {
+			m_linear.set(0.75);
+		} else if(state == -1) {
+			m_linear.set(-0.75);
 		} else {
-			m_rollers.set(0);
+			m_linear.set(0);
 		}
 	}
 	
