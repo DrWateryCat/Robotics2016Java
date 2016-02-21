@@ -1,11 +1,12 @@
 
 package org.usfirst.frc.team2186.robot;
 
+import org.usfirst.frc.team2186.robot.RobotMap.Controller;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;    //Should this be removed? I mean, are we gonna use this here?
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -61,26 +62,29 @@ public class Robot extends IterativeRobot {
     int shift = 0;
     public void teleopPeriodic() {
     	ledRing.set(true);
+    	
+    	//Drive controls
     	d.teleop(j);
     	if(driver.getRawButton(3))
     		SmartDashboard.putNumber("DriveType", 1);
     	else
     		SmartDashboard.putNumber("DriveType", 0);
     	
-    	
-    	if(j.getRawButton(1))
+    	//Gear shift controls
+    	if(j.getRawButton(Controller.TRIANGLE))
     		d.shift(1);
-    	else if(j.getRawButton(3))
+    	else if(j.getRawButton(Controller.X_BUTTON))
     		d.shift(0);
     	
-    	if(driver.getRawButton(4))     //change button later
+    	if(driver.getRawButton(Controller.SQUARE))     //change button later
     		SmartDashboard.putBoolean("Rev", true);
     	else
     		SmartDashboard.putBoolean("Rev", false);
     	
-    	if(j.getRawButton(2))
+    	//Intake controls
+    	if(j.getRawButton(Controller.CIRCLE))
     		i.moveIntake();
-    	else if (j.getRawButton(4))
+    	else if (j.getRawButton(Controller.SQUARE))
     		i.reverseIntake();
     	else
     		i.stopIntake();
