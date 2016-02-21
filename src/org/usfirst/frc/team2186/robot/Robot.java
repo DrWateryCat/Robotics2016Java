@@ -31,7 +31,6 @@ public class Robot extends IterativeRobot {
 	
 	DigitalOutput ledRing;
 	
-	RobotMap.Controller Controller = new RobotMap.Controller();
     public void robotInit() {
     	c = new Compressor();
     	c.start();
