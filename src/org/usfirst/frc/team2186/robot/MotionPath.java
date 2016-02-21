@@ -42,7 +42,8 @@ public class MotionPath {
 	
 	public void moveForward(int dist, String unit, double speed)
 	{
-		driveTrain.set(speed, speed);
+		if(unit.equals("ft"))
+			dist *= 12;
 		if(unit.equals("sec")){
 			driveTrain.set(speed, speed);
 			Timer.delay(dist);
@@ -53,6 +54,8 @@ public class MotionPath {
 	
 	public void moveBackward(int dist, String unit, double speed)
 	{
+		if(unit.equals("ft"))
+			dist *= 12;
 		if(unit.equals("sec")){
 			driveTrain.set(-speed, -speed);
 			Timer.delay(dist);

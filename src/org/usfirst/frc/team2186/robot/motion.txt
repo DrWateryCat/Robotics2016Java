@@ -1,5 +1,4 @@
-forward 2 in
-shift 1
-forward 3 in
+forward 136 in
+turn right 50 deg
+forward 144 in
 stop
-turn left 90 deg
