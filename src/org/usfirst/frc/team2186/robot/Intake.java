@@ -6,9 +6,8 @@ import edu.wpi.first.wpilibj.VictorSP;
 public class Intake {
 	private static Intake _instance;
 	public static Intake getInstance() {
-		if(_instance == null) {
+		if(_instance == null)
 			_instance = new Intake();
-		}
 		
 		return _instance;
 	}
@@ -25,12 +24,13 @@ public class Intake {
 		out_limit = new DigitalInput(RobotMap.Intake.OUT_LIMIT);
 	}
 	
-	public void setRollers(boolean state) {
-		if(state) {
-			m_rollers.set(0.75);
-		} else {
-			m_rollers.set(0);
-		}
+	public void setRollers(int state) {
+		if(state == 1)
+			m_linear.set(0.75);
+		else if(state == -1)
+			m_linear.set(-0.75);
+		else
+			m_linear.set(0);
 	}
 	
 	public void moveIntake() {
