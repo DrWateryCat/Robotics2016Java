@@ -30,8 +30,15 @@ public class MotionPath {
 				moveBackward(in.nextInt(), in.next(), DEFAULT_SPEED);
 				break;
 			case "turn":
-				if (in.next().equals("left")) turnLeft(in.nextInt(), in.next(), TURN_SPEED);
-				else turnRight(in.nextInt(), in.next(), TURN_SPEED);
+				if (in.next().equals("left")) 
+					turnLeft(in.nextInt(), in.next(), TURN_SPEED);
+				else 
+					turnRight(in.nextInt(), in.next(), TURN_SPEED);
+				break;
+			case "unload":
+				Intake.getInstance().reverseIntake();
+				Timer.delay(5);
+				Intake.getInstance().stopIntake();
 				break;
 			default:    //stop. Can be anything (but should probably say "stop" for clarity)
 				driveTrain.stop();
