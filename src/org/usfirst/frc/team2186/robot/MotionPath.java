@@ -9,8 +9,14 @@ public class MotionPath {
 	double DEFAULT_SPEED = 0.75, TURN_SPEED = 0.5;
 	boolean passed = false;
 	Drive driveTrain = Drive.getInstance();
+	
+	private String path = "forward 136 in\nturn right 50 deg\nforward 144 in\nstop";
 	public MotionPath(String file) {
 		in = new Scanner(getClass().getResourceAsStream(file));
+	}
+	
+	public MotionPath() {
+		in = new Scanner(path);
 	}
 	/**
 	 * Call this in a loop, because this does not have a loop function embedded

@@ -30,11 +30,13 @@ public class Robot extends IterativeRobot {
 	Intake i = Intake.getInstance();
 	
 	DigitalOutput ledRing;
+	
+	RobotMap.Controller Controller = new RobotMap.Controller();
     public void robotInit() {
     	c = new Compressor();
     	c.start();
     	
-    	//autonomous = new MotionPath("motion.txt");
+    	autonomous = new MotionPath();
     	
     	SmartDashboard.putNumber("DriveType", 0);
     	SmartDashboard.putBoolean("Rev", false);
@@ -49,7 +51,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	//autonomous.interpret();
+    	autonomous.interpret();
     }
     
     public void teleopInit() {
