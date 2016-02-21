@@ -4,6 +4,7 @@ package org.usfirst.frc.team2186.robot;
 import org.usfirst.frc.team2186.robot.RobotMap.Controller;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.Timer;
@@ -71,10 +72,10 @@ public class Robot extends IterativeRobot {
     		SmartDashboard.putNumber("DriveType", 0);
     	
     	//Gear shift controls
-    	if(j.getRawButton(Controller.TRIANGLE))
-    		d.shift(1);
-    	else if(j.getRawButton(Controller.X_BUTTON))
+    	if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kForward)
     		d.shift(0);
+    	else if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kReverse)
+    		d.shift(1);
     	
     	if(driver.getRawButton(Controller.SQUARE))     //change button later
     		SmartDashboard.putBoolean("Rev", true);
