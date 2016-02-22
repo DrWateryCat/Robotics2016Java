@@ -90,13 +90,14 @@ public class Robot extends IterativeRobot {
     		SmartDashboard.putBoolean("Rev", false);
     	
     	//Intake controls
+    	/**
     	if(j.getRawButton(Controller.CIRCLE))
     		i.moveIntake();
     	else if (j.getRawButton(Controller.SQUARE))
     		i.reverseIntake();
     	else
     		i.stopIntake();
-    	
+    	**/
     	if(j.getRawButton(Controller.LEFT_BOTTOM_SHOULDER))
     		i.setRollers(1);
     	else if(j.getRawButton(Controller.RIGHT_BOTTOM_SHOULDER))

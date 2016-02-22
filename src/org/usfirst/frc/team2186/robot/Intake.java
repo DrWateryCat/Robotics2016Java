@@ -23,7 +23,7 @@ public class Intake {
 		
 		out_limit = new DigitalInput(RobotMap.Intake.OUT_LIMIT);
 	}
-	
+
 	public void setRollers(int state) {
 		if(state == 1)
 			m_linear.set(0.75);
@@ -32,7 +32,7 @@ public class Intake {
 		else
 			m_linear.set(0);
 	}
-	
+	/**
 	public void moveIntake() {
 		m_rollers.set(0.5);
 	}
@@ -44,4 +44,5 @@ public class Intake {
 	public void reverseIntake() {
 		m_rollers.set(-0.25);
 	}
+	**/
 }

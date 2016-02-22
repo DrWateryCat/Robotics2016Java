@@ -41,9 +41,9 @@ public class MotionPath {
 					turnRight(in.nextInt(), in.next(), TURN_SPEED);
 				break;
 			case "unload":
-				Intake.getInstance().reverseIntake();
+				Intake.getInstance().setRollers(1);
 				Timer.delay(5);
-				Intake.getInstance().stopIntake();
+				Intake.getInstance().setRollers(0);
 				break;
 			default:    //stop. Can be anything (but should probably say "stop" for clarity)
 				driveTrain.stop();
