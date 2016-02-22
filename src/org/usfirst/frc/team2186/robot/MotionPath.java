@@ -1,7 +1,6 @@
 package org.usfirst.frc.team2186.robot;
 
 import java.util.Scanner;
-
 import edu.wpi.first.wpilibj.Timer;
 
 public class MotionPath {

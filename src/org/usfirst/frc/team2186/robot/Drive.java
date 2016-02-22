@@ -9,6 +9,7 @@ public class Drive {
 		public static final int ARCADE_DRIVE = 1;
 	}
 	private static Drive _instance = null;
+	private static final double MAX_SPEED = .75;
 	public static Drive getInstance() {
 		if(_instance == null) {
 			_instance = new Drive();
@@ -100,20 +101,28 @@ public class Drive {
 	}
 	
 	public void teleop(Joystick j) {
+		double left, right, x, y;
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 0);
 		if(driveType == DriveTypes.TANK_DRIVE) {
-			double left = Utils.deadzone(j.getRawAxis(1));
-			double right = -Utils.deadzone(j.getRawAxis(3));
+			left = Utils.deadzone(j.getRawAxis(1));
+			right = -Utils.deadzone(j.getRawAxis(3));
 			
 			set(left, right);
 		} else {
-			double x = j.getRawAxis(0);
-			double y = j.getRawAxis(1);
+			x = j.getRawAxis(0);
+			y = j.getRawAxis(1);
 			
-			double left = y + x;
-			double right = y - x;
-			
-			set(left, right);
+			left = y + x;
+			right = y - x;
 		}
+		
+		if(left > MAX_SPEED && right < MAX_SPEED)
+			set(MAX_SPEED, right);
+		else if(right > MAX_SPEED && left < MAX_SPEED)
+			set(left, MAX_SPEED);
+		else if(left > MAX_SPEED && right > MAX_SPEED)
+			set(MAX_SPEED, MAX_SPEED);
+		else
+			set(left, right);
 	}
 }

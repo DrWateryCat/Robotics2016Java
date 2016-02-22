@@ -21,6 +21,7 @@ public class Robot extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+	boolean toggle = true;
 	Drive d = Drive.getInstance();
 	Joystick j = new Joystick(0);
 	Joystick driver = new Joystick(1);
@@ -71,11 +72,17 @@ public class Robot extends IterativeRobot {
     	else
     		SmartDashboard.putNumber("DriveType", 0);
     	
-    	//Gear shift controls
-    	if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kForward)
-    		d.shift(0);
-    	else if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kReverse)
-    		d.shift(1);
+    	//Gear shift controls - press to toggle, release then press to toggle again
+    	if(toggle == true){
+    		if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kForward){
+    			d.shift(0);
+    			toggle = false;
+    		} else if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kReverse){
+    			d.shift(1);
+    			toggle = false;
+    		}
+    	} else if(!j.getRawButton(Controller.TRIANGLE) && toggle == false)
+    		toggle = true;
     	
     	if(driver.getRawButton(Controller.SQUARE))     //change button later
     		SmartDashboard.putBoolean("Rev", true);
