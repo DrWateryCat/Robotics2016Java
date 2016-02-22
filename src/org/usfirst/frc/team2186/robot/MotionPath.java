@@ -9,9 +9,10 @@ public class MotionPath {
 	boolean passed = false;
 	Drive driveTrain = Drive.getInstance();
 	
-	private String path = "forward 136 in\nturn right 50 deg\nforward 144 in\nstop";
-	public MotionPath(String file) {
-		in = new Scanner(getClass().getResourceAsStream(file));
+	private String path = "stop";
+	
+	public MotionPath(String instruct) {
+		in = new Scanner(instruct);
 	}
 	
 	public MotionPath() {

@@ -22,6 +22,7 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
 	boolean toggle = true;
+	String autoInstruct;
 	Drive d = Drive.getInstance();
 	Joystick j = new Joystick(0);
 	Joystick driver = new Joystick(1);
@@ -36,15 +37,14 @@ public class Robot extends IterativeRobot {
     	c = new Compressor();
     	c.start();
     	
-    	autonomous = new MotionPath();
-    	
     	SmartDashboard.putNumber("DriveType", 0);
     	SmartDashboard.putBoolean("Rev", false);
     	ledRing = new DigitalOutput(5);
     }
     
     public void autonomousInit() {
-    	//Intake.getInstance().start();
+    	autoInstruct = SmartDashboard.getString("AutoInstruct", "stop");
+    	autonomous = new MotionPath(autoInstruct);
     }
 
     /**
