@@ -78,9 +78,9 @@ public class Robot extends IterativeRobot {
     		 } else if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kReverse){
     		 		d.shift(1);
     		 		toggle = false;
-    		 } else if(!j.getRawButton(Controller.TRIANGLE) && toggle == false)
-    			 toggle = true;
-    	}
+    		 }
+    	} else if(!j.getRawButton(Controller.TRIANGLE) && toggle == false)
+			 toggle = true;
     	
     	if(driver.getRawButton(Controller.SQUARE))     //change button later
     		SmartDashboard.putBoolean("Rev", true);
