@@ -4,7 +4,6 @@ package org.usfirst.frc.team2186.robot;
 import org.usfirst.frc.team2186.robot.RobotMap.Controller;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,8 +20,6 @@ public class Robot extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
-	boolean toggle = true;
-	String autoInstruct;
 	Drive d = Drive.getInstance();
 	Joystick j = new Joystick(0);
 	Joystick driver = new Joystick(1);
@@ -37,14 +34,15 @@ public class Robot extends IterativeRobot {
     	c = new Compressor();
     	c.start();
     	
-    	SmartDashboard.putNumber("DriveType", 0);
+    	autonomous = new MotionPath(SmartDashboard.getString("AutoCode", "stop"));
+    	
+    	SmartDashboard.putNumber("DriveType", 1);
     	SmartDashboard.putBoolean("Rev", false);
     	ledRing = new DigitalOutput(5);
     }
     
     public void autonomousInit() {
-    	autoInstruct = SmartDashboard.getString("AutoInstruct", "stop");
-    	autonomous = new MotionPath(autoInstruct);
+    	//Intake.getInstance().start();
     }
 
     /**
@@ -72,17 +70,11 @@ public class Robot extends IterativeRobot {
     	else
     		SmartDashboard.putNumber("DriveType", 0);
     	
-    	//Gear shift controls - press to toggle, release then press to toggle again
-    	if(toggle == true){
-    		if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kForward){
-    			d.shift(0);
-    			toggle = false;
-    		} else if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kReverse){
-    			d.shift(1);
-    			toggle = false;
-    		}
-    	} else if(!j.getRawButton(Controller.TRIANGLE) && toggle == false)
-    		toggle = true;
+    	//Gear shift controls
+    	if(j.getRawButton(RobotMap.Controller.TRIANGLE))
+    		d.shift(1);
+    	else if(j.getRawButton(RobotMap.Controller.X_BUTTON))
+    		d.shift(0);
     	
     	if(driver.getRawButton(Controller.SQUARE))     //change button later
     		SmartDashboard.putBoolean("Rev", true);
@@ -90,15 +82,14 @@ public class Robot extends IterativeRobot {
     		SmartDashboard.putBoolean("Rev", false);
     	
     	//Intake controls
-    	/**
     	if(j.getRawButton(Controller.CIRCLE))
     		i.moveIntake();
     	else if (j.getRawButton(Controller.SQUARE))
     		i.reverseIntake();
     	else
     		i.stopIntake();
-    	**/
-    	if(j.getRawButton(Controller.LEFT_BOTTOM_SHOULDER))
+    	
+    	if(j.getRawButton(Controller.RIGHT_TOP_SHOULDER))
     		i.setRollers(1);
     	else if(j.getRawButton(Controller.RIGHT_BOTTOM_SHOULDER))
     		i.setRollers(-1);
