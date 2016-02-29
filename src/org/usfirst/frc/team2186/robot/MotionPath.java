@@ -23,32 +23,34 @@ public class MotionPath {
 	 * Or better yet, don't. Just slap it in the autonomous update and it should be fine
 	 */
 	public void interpret() {
-		String c = in.next();
-		if(!passed) {
-			switch(c) {
-			case "forward":
-				moveForward(in.nextInt(), in.next(), DEFAULT_SPEED);
-				break;
-			case "shift":
-				driveTrain.shift(in.nextInt());
-				break;
-			case "reverse":
-				moveBackward(in.nextInt(), in.next(), DEFAULT_SPEED);
-				break;
-			case "turn":
-				if (in.next().equals("left")) 
-					turnLeft(in.nextInt(), in.next(), TURN_SPEED);
-				else 
-					turnRight(in.nextInt(), in.next(), TURN_SPEED);
-				break;
-			case "unload":
-				Intake.getInstance().setRollers(1);
-				Timer.delay(5);
-				Intake.getInstance().setRollers(0);
-				break;
-			default:    //stop. Can be anything (but should probably say "stop" for clarity)
-				driveTrain.stop();
-				passed = true;
+		if(in.hasNext()) {
+			String c = in.next();
+			if(!passed) {
+				switch(c) {
+				case "forward":
+					moveForward(in.nextInt(), in.next(), DEFAULT_SPEED);
+					break;
+				case "shift":
+					driveTrain.shift(in.nextInt());
+					break;
+				case "reverse":
+					moveBackward(in.nextInt(), in.next(), DEFAULT_SPEED);
+					break;
+				case "turn":
+					if (in.next().equals("left")) 
+						turnLeft(in.nextInt(), in.next(), TURN_SPEED);
+					else 
+						turnRight(in.nextInt(), in.next(), TURN_SPEED);
+					break;
+				case "unload":
+					Intake.getInstance().setRollers(1);
+					Timer.delay(5);
+					Intake.getInstance().setRollers(0);
+					break;
+				default:    //stop. Can be anything (but should probably say "stop" for clarity)
+					driveTrain.stop();
+					passed = true;
+				}
 			}
 		}
 	}

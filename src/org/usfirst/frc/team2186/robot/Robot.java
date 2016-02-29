@@ -2,12 +2,15 @@
 package org.usfirst.frc.team2186.robot;
 
 import org.usfirst.frc.team2186.robot.RobotMap.Controller;
+
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.USBCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,17 +35,28 @@ public class Robot extends IterativeRobot {
 	
 	DigitalOutput ledRing;
 	
+	//USBCamera cam0;
+	//CameraServer cs;
+	
     public void robotInit() {
     	c = new Compressor();
     	c.start();
     	
-    	SmartDashboard.putNumber("DriveType", 1);
+    	SmartDashboard.putNumber("DriveType", 0);
     	SmartDashboard.putBoolean("Rev", false);
     	ledRing = new DigitalOutput(5);
+    	
+    	//cam0 = new USBCamera("cam0");
+    	//cs = CameraServer.getInstance();
+    	//cs.setQuality(50);
+    	//cs.startAutomaticCapture(cam0);
+    	
     }
     
     public void autonomousInit() {
-    	autonomous = new MotionPath(SmartDashboard.getString("AutoCode", "stop"));
+    	System.out.println(SmartDashboard.getString("AutoCode"));
+
+    	autonomous = new MotionPath("forward 5 sec stop");
     }
 
     /**
@@ -64,33 +78,26 @@ public class Robot extends IterativeRobot {
     	ledRing.set(true);
     	
     	//Drive controls
-    	d.teleop(j);
-    	if(driver.getRawButton(3))
-    		SmartDashboard.putNumber("DriveType", 1);
-    	else
-    		SmartDashboard.putNumber("DriveType", 0);
+    	d.teleop(j, driver);
+    	
+    	SmartDashboard.putDouble("right", driver.getRawAxis(1));
     	
     	//Gear shift controls
     	if(toggle == true){
-    		 if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kForward){
+    		 if(j.getRawButton(4) && d.m_left.m_value == Value.kForward){
     			 d.shift(0);
     			 toggle = false;
-    		 } else if(j.getRawButton(Controller.TRIANGLE) && d.m_left.m_value == Value.kReverse){
+    		 } else if(j.getRawButton(4) && d.m_left.m_value == Value.kReverse){
     		 		d.shift(1);
     		 		toggle = false;
     		 }
-    	} else if(!j.getRawButton(Controller.TRIANGLE) && toggle == false)
+    	} else if(!j.getRawButton(4) && toggle == false)
 			 toggle = true;
     	
-    	if(driver.getRawButton(Controller.SQUARE))     //change button later
-    		SmartDashboard.putBoolean("Rev", true);
-    	else
-    		SmartDashboard.putBoolean("Rev", false);
-    	
     	//Intake controls
-    	if(j.getRawButton(Controller.RIGHT_TOP_SHOULDER))
+    	if(j.getRawButton(3) || driver.getRawButton(3))
     		i.setRollers(1);
-    	else if(j.getRawButton(Controller.RIGHT_BOTTOM_SHOULDER))
+    	else if(j.getRawButton(1) || driver.getRawButton(1))
     		i.setRollers(-1);
     	else
     		i.setRollers(0);

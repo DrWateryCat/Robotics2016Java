@@ -102,15 +102,41 @@ public class Drive {
 	
 	public void teleop(Joystick j) {
 		double left, right, x, y;
-		int driveType = (int) SmartDashboard.getNumber("DriveType", 0);
+		int driveType = (int) SmartDashboard.getNumber("DriveType", 1);
 		if(driveType == DriveTypes.TANK_DRIVE) {
 			left = Utils.deadzone(j.getRawAxis(1));
 			right = -Utils.deadzone(j.getRawAxis(3));
 			
 			set(left, right);
 		} else {
-			x = j.getRawAxis(0);
-			y = j.getRawAxis(1);
+			x = Utils.deadzone(j.getRawAxis(0));
+			y = Utils.deadzone(j.getRawAxis(1));
+			
+			left = y + x;
+			right = y - x;
+		}
+		
+		if(left > MAX_SPEED && right < MAX_SPEED)
+			set(MAX_SPEED, right);
+		else if(right > MAX_SPEED && left < MAX_SPEED)
+			set(left, MAX_SPEED);
+		else if(left > MAX_SPEED && right > MAX_SPEED)
+			set(MAX_SPEED, MAX_SPEED);
+		else
+			set(left, right);
+	}
+	
+	public void teleop(Joystick j1, Joystick j2) {
+		double left, right, x, y;
+		int driveType = (int) SmartDashboard.getNumber("DriveType", 1);
+		if(driveType == DriveTypes.TANK_DRIVE) {
+			left = Utils.deadzone(j1.getRawAxis(1));
+			right = -Utils.deadzone(j2.getRawAxis(1));
+			
+			set(left, right);
+		} else {
+			x = Utils.deadzone(j1.getRawAxis(0));
+			y = Utils.deadzone(j1.getRawAxis(1));
 			
 			left = y + x;
 			right = y - x;
