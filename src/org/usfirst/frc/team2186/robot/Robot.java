@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	System.out.println(SmartDashboard.getString("AutoCode"));
 
-    	autonomous = new MotionPath("forward 5 sec stop");
+    	autonomous = new MotionPath(SmartDashboard.getString("AutoCode"));
     }
 
     /**
@@ -79,8 +79,6 @@ public class Robot extends IterativeRobot {
     	
     	//Drive controls
     	d.teleop(j, driver);
-    	
-    	SmartDashboard.putDouble("right", driver.getRawAxis(1));
     	
     	//Gear shift controls
     	if(toggle == true){
