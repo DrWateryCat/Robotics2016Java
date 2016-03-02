@@ -1,16 +1,12 @@
 
 package org.usfirst.frc.team2186.robot;
 
-import org.usfirst.frc.team2186.robot.RobotMap.Controller;
-
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.vision.USBCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -56,7 +52,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	System.out.println(SmartDashboard.getString("AutoCode"));
 
-    	autonomous = new MotionPath("forward 5 sec stop");
+    	autonomous = new MotionPath(SmartDashboard.getString("AutoCode"));
     }
 
     /**
@@ -79,8 +75,6 @@ public class Robot extends IterativeRobot {
     	
     	//Drive controls
     	d.teleop(j, driver);
-    	
-    	SmartDashboard.putDouble("right", driver.getRawAxis(1));
     	
     	//Gear shift controls
     	if(toggle == true){
