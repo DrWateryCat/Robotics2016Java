@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
 	
 	Intake i = Intake.getInstance();
 	
-	DigitalOutput ledRing;
+	//DigitalOutput ledRing;
 	
 	//USBCamera cam0;
 	//CameraServer cs;
@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot {
     	
     	SmartDashboard.putNumber("DriveType", 0);
     	SmartDashboard.putBoolean("Rev", false);
-    	ledRing = new DigitalOutput(5);
+    	//ledRing = new DigitalOutput(5);
     	
     	//cam0 = new USBCamera("cam0");
     	//cs = CameraServer.getInstance();
@@ -71,7 +71,7 @@ public class Robot extends IterativeRobot {
      */
     int shift = 0;
     public void teleopPeriodic() {
-    	ledRing.set(true);
+    	//ledRing.set(true);
     	
     	//Drive controls
     	d.teleop(j, driver);
