@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -29,6 +30,8 @@ public class Robot extends IterativeRobot {
 	
 	Intake i = Intake.getInstance();
 	
+	VictorSP flippy;
+	
 	//DigitalOutput ledRing;
 	
 	//USBCamera cam0;
@@ -46,6 +49,8 @@ public class Robot extends IterativeRobot {
     	//cs = CameraServer.getInstance();
     	//cs.setQuality(50);
     	//cs.startAutomaticCapture(cam0);
+    	
+    	flippy = new VictorSP(6);
     	
     }
     
@@ -95,6 +100,13 @@ public class Robot extends IterativeRobot {
     		i.setRollers(-1);
     	else
     		i.setRollers(0);
+    	
+    	if(j.getRawButton(6) || driver.getRawButton(6))
+    		flippy.set(1);
+    	else if(j.getRawButton(7) || driver.getRawButton(7))
+    		flippy.set(-1);
+    	else
+    		flippy.set(0);
     }
     
     public void disabledInit() {
