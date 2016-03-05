@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	System.out.println(SmartDashboard.getString("AutoCode"));
 
-    	autonomous = new MotionPath(SmartDashboard.getString("AutoCode"));
+    	autonomous = new MotionPath("forward 5 sec;stop;");
     }
 
     /**

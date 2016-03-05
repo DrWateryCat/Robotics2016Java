@@ -15,10 +15,25 @@ public class MotionPath {
 	private ArrayList<String[]> commands;
 	
 	public MotionPath(String instruct) {
+		commands = new ArrayList<String[]>();
+		
 		if(instruct != null && !instruct.equals("")) {
-			for(String s : instruct.split(";")) {
-				if(!s.equals(null))
-					commands.add(s.split(" "));
+			String[] ss = instruct.split(";");
+			System.out.println("Length of commands: " + ss.length);
+			for(String line : ss) {
+				System.out.println(line);
+				String[] reconstruct = new String[line.length()];
+				int i = 0;
+				for(String word : line.split(" ")) {
+					System.out.println("Word: " + word);
+					if(!word.equals("") && word != null) {
+						System.out.println("Isn't empty!");
+						reconstruct[i] = word;
+						i++;
+					}
+				}
+				commands.add(reconstruct);
+				//commands.add(line.split(" "));
 			}
 		}
 	}
@@ -38,6 +53,12 @@ public class MotionPath {
 		String c = cmd[0].toLowerCase();
 		String extra = "";
 		
+		if(cmd[0].equals("stop") || (cmd.length == 0 && !cmd[0].equals("intake")))
+		{
+			Drive.getInstance().stop();
+			return;
+		}
+		
 		double dist = 0;
 		if(cmd.length > 1 && c != "shift")
 			dist = Double.parseDouble(cmd[1]);
@@ -52,17 +73,17 @@ public class MotionPath {
 		switch(c) {
 		case "forward":
 			if(cmd.length >= 2)
-				this.moveForward(dist, cmd[3], DEFAULT_SPEED);
+				this.moveForward(dist, cmd[2], DEFAULT_SPEED);
 			break;
 		case "reverse":
 			if(cmd.length >= 2)
-				this.moveBackward(dist, cmd[3], DEFAULT_SPEED);
+				this.moveBackward(dist, cmd[2], DEFAULT_SPEED);
 			break;
 		case "turn":
 			if(cmd.length >= 3 && extra.equals("left"))
-				this.turnLeft(-dist, cmd[3], TURN_SPEED);
+				this.turnLeft(-dist, cmd[2], TURN_SPEED);
 			else
-				this.turnRight(dist, cmd[3], TURN_SPEED);
+				this.turnRight(dist, cmd[2], TURN_SPEED);
 			break;
 		case "unload":
 			Intake.getInstance().setRollers(-1);
