@@ -34,6 +34,7 @@ public class StateMachine
 		//Essentially creates a countdown
 		if(time > 0){
 			if(startTime + time <= Timer.getMatchTime()){
+				System.out.println("Ending state, becoming STOPPED");
 				currentState = STOPPED;
 				time = 0;
 			}
@@ -43,6 +44,7 @@ public class StateMachine
 		if(distance > 0) {
 			if((Drive.getInstance().m_left.m_encoder.getDistance()+
 				Drive.getInstance().m_right.m_encoder.getDistance())/2 >= distance){
+				System.out.println("Ending state, becoming STOPPED");
 				currentState = STOPPED;
 				distance = 0;
 			}
@@ -53,6 +55,7 @@ public class StateMachine
 			currentState = STOPPED;
 		
 		//Actions!
+		System.out.println("Acting on state: "+currentState);
 		switch(currentState){
 		case FORWARD:
 			Drive.getInstance().set(Drive.MAX_SPEED, Drive.MAX_SPEED);
@@ -90,6 +93,7 @@ public class StateMachine
 	//set "time" boolean to true for time-based state
 	public void changeState(int state, double units, boolean time)
 	{
+		System.out.println("New state: "+currentState+" "+units+" units length");
 		changeState(state);
 		if(time)
 			changeTime(units);

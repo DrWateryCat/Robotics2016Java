@@ -73,6 +73,8 @@ public class MotionPath {
 		else if(extra == "sec")
 			time = true;
 		
+		System.out.println("Parsing command: "+c);
+		
 		switch(c) {
 		case "forward":
 			if(cmd.length >= 2)
