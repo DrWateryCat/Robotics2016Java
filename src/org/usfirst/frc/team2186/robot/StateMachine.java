@@ -19,30 +19,33 @@ public class StateMachine
 	private int currentState;
 	private double distance;
 	private double time;
-	private double prevTime;
+	private double startTime;
 	
 	public StateMachine()
 	{
 		currentState = STOPPED;
 		distance = 0;
 		time = 0;
-		prevTime = 0;
+		startTime = 0;
 	}
 	
 	public void update()
 	{
 		//Essentially creates a countdown
 		if(time > 0){
-			time -= Timer.getMatchTime() - prevTime;
-			prevTime = Timer.getMatchTime();
+			if(startTime + time <= Timer.getMatchTime()){
+				currentState = STOPPED;
+				time = 0;
+			}
 		}
 		
 		//Distance countdown!
 		if(distance > 0) {
-			double avgDist = (Drive.getInstance().m_left.m_encoder.getDistance()+
-							  Drive.getInstance().m_right.m_encoder.getDistance())/2;
-			distance -= avgDist;
-			Drive.getInstance().reset();
+			if((Drive.getInstance().m_left.m_encoder.getDistance()+
+				Drive.getInstance().m_right.m_encoder.getDistance())/2 >= distance){
+				currentState = STOPPED;
+				distance = 0;
+			}
 		}
 		
 		//Stop from going too far
@@ -100,6 +103,7 @@ public class StateMachine
 		if(dist < 0)
 			return;
 		distance = dist;
+		Drive.getInstance().reset();
 	}
 	
 	//Time is in seconds.
@@ -107,5 +111,6 @@ public class StateMachine
 		if(t < 0)
 			return;
 		time = t;
+		startTime = Timer.getMatchTime();
 	}
 }
