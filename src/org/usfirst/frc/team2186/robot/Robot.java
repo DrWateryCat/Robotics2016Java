@@ -2,7 +2,7 @@
 package org.usfirst.frc.team2186.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalOutput;
+//import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -26,10 +26,11 @@ public class Robot extends IterativeRobot {
 	Joystick driver = new Joystick(1);
 	Compressor c;
 	MotionPath autonomous;
+	static StateMachine stateMachine;
 	
 	Intake i = Intake.getInstance();
 	
-	DigitalOutput ledRing;
+	//DigitalOutput ledRing;
 	
 	//USBCamera cam0;
 	//CameraServer cs;
@@ -40,7 +41,7 @@ public class Robot extends IterativeRobot {
     	
     	SmartDashboard.putNumber("DriveType", 0);
     	SmartDashboard.putBoolean("Rev", false);
-    	ledRing = new DigitalOutput(5);
+    	//ledRing = new DigitalOutput(5);
     	
     	//cam0 = new USBCamera("cam0");
     	//cs = CameraServer.getInstance();
@@ -51,19 +52,23 @@ public class Robot extends IterativeRobot {
     
     public void autonomousInit() {
     	System.out.println(SmartDashboard.getString("AutoCode"));
-
+    	
     	autonomous = new MotionPath(SmartDashboard.getString("AutoCode"));
+    	stateMachine = new StateMachine();
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	autonomous.interpret();
+    	if(stateMachine.getState() == StateMachine.STOPPED)
+    		autonomous.interpret();
+    	else
+    		stateMachine.update();
     }
     
     public void teleopInit() {
-    	d.shift(0);
+    //	d.shift(0);
     }
 
     /**
@@ -71,7 +76,7 @@ public class Robot extends IterativeRobot {
      */
     int shift = 0;
     public void teleopPeriodic() {
-    	ledRing.set(true);
+    	//ledRing.set(true);
     	
     	//Drive controls
     	d.teleop(j, driver);
