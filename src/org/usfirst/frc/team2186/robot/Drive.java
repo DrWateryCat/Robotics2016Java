@@ -9,7 +9,7 @@ public class Drive {
 		public static final int ARCADE_DRIVE = 1;
 	}
 	private static Drive _instance = null;
-	private static final double MAX_SPEED = .75;
+	public static final double MAX_SPEED = .75;
 	public static Drive getInstance() {
 		if(_instance == null) {
 			_instance = new Drive();
@@ -25,7 +25,7 @@ public class Drive {
 	}
 	
 	public void setRight(double val) {
-		m_right.set(val);
+		m_right.set(-val);
 	}
 	
 	public void setLeft(double val) {
@@ -49,7 +49,7 @@ public class Drive {
 		setLeft(left);
 		setRight(right);
 	}
-	
+	/** DEPRECATED
 	public void goDistance(double dist, double speed) {
 		double m_left_dist = 0, m_right_dist = 0;
 		
@@ -70,12 +70,20 @@ public class Drive {
 		}
 		stop();
 	}
-	
+	*/
 	public void stop()
 	{
 		set(0, 0);
 	}
 	
+	//Resets the encoders.
+	public void reset()
+	{
+		m_left.m_encoder.reset();
+		m_right.m_encoder.reset();
+	}
+	
+	/** DEPRECATED
 	public void turnAngle(double speed, double degrees)
 	{
 		if(degrees == 0)
@@ -99,13 +107,14 @@ public class Drive {
 		//stop turnin.
 		stop();
 	}
+	*/
 	
 	public void teleop(Joystick j) {
 		double left, right, x, y;
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 1);
 		if(driveType == DriveTypes.TANK_DRIVE) {
 			left = Utils.deadzone(j.getRawAxis(1));
-			right = -Utils.deadzone(j.getRawAxis(3));
+			right = Utils.deadzone(j.getRawAxis(3));
 			
 			set(left, right);
 		} else {
@@ -113,7 +122,7 @@ public class Drive {
 			y = Utils.deadzone(j.getRawAxis(1));
 			
 			left = y + x;
-			right = y - x;
+			right = -(y - x);
 		}
 		
 		if(left > MAX_SPEED && right < MAX_SPEED)

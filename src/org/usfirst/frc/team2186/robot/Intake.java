@@ -19,7 +19,7 @@ public class Intake {
 	
 	private Intake() {
 		m_linear = new VictorSP(RobotMap.Intake.LINEAR);
-		m_rollers = new VictorSP(RobotMap.Intake.ROLLERS);
+		//m_rollers = new VictorSP(RobotMap.Intake.ROLLERS);
 		
 		out_limit = new DigitalInput(RobotMap.Intake.OUT_LIMIT);
 	}

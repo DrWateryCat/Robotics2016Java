@@ -46,7 +46,6 @@ public class MotionPath {
 	 * Or better yet, don't. Just slap it in the autonomous update and it should be fine
 	 */
 	public void interpret() {
-<<<<<<< HEAD
 		if(commands.size() == 0)
 			return;
 		
@@ -61,6 +60,7 @@ public class MotionPath {
 		}
 		
 		double dist = 0;
+		boolean time = false;
 		if(cmd.length > 1 && c != "shift")
 			dist = Double.parseDouble(cmd[1]);
 		if(cmd.length > 2 && c != "shift")
@@ -70,21 +70,23 @@ public class MotionPath {
 		if(extra == "ft")
 			if(c.equals("forward") || c.equals("reverse"))
 				dist *= 12;
+		else if(extra == "sec")
+			time = true;
 		
 		switch(c) {
 		case "forward":
 			if(cmd.length >= 2)
-				this.moveForward(dist, cmd[2], DEFAULT_SPEED);
+				Robot.stateMachine.changeState(StateMachine.FORWARD, dist, time);
 			break;
 		case "reverse":
 			if(cmd.length >= 2)
-				this.moveBackward(dist, cmd[2], DEFAULT_SPEED);
+				Robot.stateMachine.changeState(StateMachine.BACKWARD, dist, time);
 			break;
 		case "turn":
 			if(cmd.length >= 3 && extra.equals("left"))
-				this.turnLeft(-dist, cmd[2], TURN_SPEED);
+				Robot.stateMachine.changeState(StateMachine.TURN_LEFT, dist, time);
 			else
-				this.turnRight(dist, cmd[2], TURN_SPEED);
+				Robot.stateMachine.changeState(StateMachine.TURN_RIGHT, dist, time);
 			break;
 		case "unload":
 			Intake.getInstance().setRollers(-1);
@@ -97,44 +99,14 @@ public class MotionPath {
 					Drive.getInstance().shift(1);
 				else
 					Drive.getInstance().shift(0);
-=======
-		if(!in.hasNext())
-			return;
-			
-		String c = in.next();
-		if(!passed) {
-			switch(c) {
-			case "forward":
-				moveForward(in.nextInt(), in.next(), DEFAULT_SPEED);
-				break;
-			case "shift":
-				driveTrain.shift(in.nextInt());
-				break;
-			case "reverse":
-				moveBackward(in.nextInt(), in.next(), DEFAULT_SPEED);
-				break;
-			case "turn":
-				if (in.next().equals("left")) 
-					turnLeft(in.nextInt(), in.next(), TURN_SPEED);
-				else 
-					turnRight(in.nextInt(), in.next(), TURN_SPEED);
-				break;
-			case "unload":
-				Intake.getInstance().setRollers(1);
-				Timer.delay(5);
-				Intake.getInstance().setRollers(0);
-				break;
-			default:    //stop. Can be anything (but should probably say "stop" for clarity)
-				driveTrain.stop();
-				passed = true;
->>>>>>> 83773r c0d3
 			}
 			break;
 		default:
 			Drive.getInstance().stop();
+			Robot.stateMachine.changeState(StateMachine.STOPPED);
 		}
 	}
-	
+	/** DEPRECATED
 	public void moveForward(double dist, String unit, double speed)
 	{
 		if(unit.equals("ft"))
@@ -178,4 +150,5 @@ public class MotionPath {
 		else
 			driveTrain.turnAngle(speed, -dist);
 	}
+	*/
 }

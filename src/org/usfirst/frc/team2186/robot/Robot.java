@@ -2,7 +2,7 @@
 package org.usfirst.frc.team2186.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalOutput;
+//import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -26,6 +26,7 @@ public class Robot extends IterativeRobot {
 	Joystick driver = new Joystick(1);
 	Compressor c;
 	MotionPath autonomous;
+	static StateMachine stateMachine;
 	
 	Intake i = Intake.getInstance();
 	
@@ -51,15 +52,19 @@ public class Robot extends IterativeRobot {
     
     public void autonomousInit() {
     	System.out.println(SmartDashboard.getString("AutoCode"));
-
+    	
     	autonomous = new MotionPath(SmartDashboard.getString("AutoCode"));
+    	stateMachine = new StateMachine();
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	autonomous.interpret();
+    	if(stateMachine.getState() == StateMachine.STOPPED)
+    		autonomous.interpret();
+    	else
+    		stateMachine.update();
     }
     
     public void teleopInit() {
