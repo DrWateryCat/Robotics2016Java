@@ -13,13 +13,13 @@ public class Intake {
 	}
 	
 	VictorSP m_linear;
-	VictorSP m_rollers;
+	//VictorSP m_rollers;
 	
 	DigitalInput out_limit;
 	
 	private Intake() {
 		m_linear = new VictorSP(RobotMap.Intake.LINEAR);
-		m_rollers = new VictorSP(RobotMap.Intake.ROLLERS);
+		//m_rollers = new VictorSP(RobotMap.Intake.ROLLERS);
 		
 		out_limit = new DigitalInput(RobotMap.Intake.OUT_LIMIT);
 	}
@@ -28,7 +28,7 @@ public class Intake {
 		if(state == 1)
 			m_linear.set(0.75);
 		else if(state == -1)
-			m_linear.set(-0.75);
+			m_linear.set(-1.00);
 		else
 			m_linear.set(0);
 	}

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2186.robot;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -47,7 +48,7 @@ public class Drive {
 	
 	public void set(double left, double right) {
 		setLeft(left);
-		setRight(right);
+		setRight(-right);
 	}
 	
 	public void goDistance(double dist, double speed) {
@@ -71,6 +72,10 @@ public class Drive {
 		stop();
 	}
 	
+	public Encoder[] getEncoders() {
+		return new Encoder[] {m_left.getEncoder(), m_right.getEncoder() };
+	}
+	
 	public void stop()
 	{
 		set(0, 0);
@@ -86,18 +91,22 @@ public class Drive {
 			set(speed, -speed);
 		else
 		{
-			degrees = -degrees; //can't be havin negative degrees now!
+			degrees = -degrees;
 			set(-speed, speed);
 		}
-		m_left.m_encoder.reset(); //resetti be mad nao mwahahahaha
+		m_left.m_encoder.reset(); //Reset the encoders each time we turn
 		m_right.m_encoder.reset();
 		
-		//just keep turnin until done turnin! looks stupid, but trust me IT ISN'T.
-		while(RobotMap.DriveTrain.TURNING_DEGREES_PER_PULSE*m_left.m_encoder.getRaw() < degrees ||
-			  RobotMap.DriveTrain.TURNING_DEGREES_PER_PULSE*m_right.m_encoder.getRaw() < degrees);
+		//TODO: Replace this with something not autistic AF
+		//while();
 		
-		//stop turnin.
+		//Stop.
 		stop();
+	}
+	
+	public void resetEncoders() {
+		m_left.m_encoder.reset();
+		m_right.m_encoder.reset();
 	}
 	
 	public void teleop(Joystick j) {
@@ -105,9 +114,7 @@ public class Drive {
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 1);
 		if(driveType == DriveTypes.TANK_DRIVE) {
 			left = Utils.deadzone(j.getRawAxis(1));
-			right = -Utils.deadzone(j.getRawAxis(3));
-			
-			set(left, right);
+			right = Utils.deadzone(j.getRawAxis(3));
 		} else {
 			x = Utils.deadzone(j.getRawAxis(0));
 			y = Utils.deadzone(j.getRawAxis(1));
@@ -131,7 +138,7 @@ public class Drive {
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 1);
 		if(driveType == DriveTypes.TANK_DRIVE) {
 			left = Utils.deadzone(j1.getRawAxis(1));
-			right = -Utils.deadzone(j2.getRawAxis(1));
+			right = Utils.deadzone(j2.getRawAxis(1));
 			
 			set(left, right);
 		} else {

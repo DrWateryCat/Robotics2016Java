@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -36,7 +37,7 @@ public class Robot extends IterativeRobot {
 	
 	//USBCamera cam0;
 	//CameraServer cs;
-	
+	Autonomous auto;
     public void robotInit() {
     	c = new Compressor();
     	c.start();
@@ -55,16 +56,19 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
-    	System.out.println(SmartDashboard.getString("AutoCode"));
+    	System.out.println(SmartDashboard.getString("AutoCode", "stop;"));
 
-    	autonomous = new MotionPath(SmartDashboard.getString("AutoCode"));
+    	//autonomous = new MotionPath(SmartDashboard.getString("AutoCode", "stop;"));
+    	auto = new Autonomous();
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	autonomous.interpret();
+    	//autonomous.update();
+    	SmartDashboard.putNumber("Match_Time", Timer.getMatchTime());
+    	auto.update();
     }
     
     public void teleopInit() {
@@ -102,9 +106,9 @@ public class Robot extends IterativeRobot {
     		i.setRollers(0);
     	
     	if(j.getRawButton(6) || driver.getRawButton(6))
-    		flippy.set(1);
+    		flippy.set(0.25);
     	else if(j.getRawButton(7) || driver.getRawButton(7))
-    		flippy.set(-1);
+    		flippy.set(-0.25);
     	else
     		flippy.set(0);
     }

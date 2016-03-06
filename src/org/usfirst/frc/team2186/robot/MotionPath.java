@@ -2,6 +2,9 @@ package org.usfirst.frc.team2186.robot;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import org.usfirst.frc.team2186.robot.motionpaths.*;
+
 import edu.wpi.first.wpilibj.Timer;
 
 public class MotionPath {
@@ -10,140 +13,84 @@ public class MotionPath {
 	boolean passed = false;
 	Drive driveTrain = Drive.getInstance();
 	
+	private boolean started = false;
+	
 	private String path = "stop;";
 	
-	private ArrayList<String[]> commands;
+	private ArrayList<PathComponent> commands;
 	
 	public MotionPath(String instruct) {
-		commands = new ArrayList<String[]>();
+		commands = new ArrayList<PathComponent>();
 		
 		if(instruct != null && !instruct.equals("")) {
 			String[] ss = instruct.split(";");
 			System.out.println("Length of commands: " + ss.length);
 			for(String line : ss) {
 				System.out.println(line);
-				String[] reconstruct = new String[line.length()];
+				String[] cmd = new String[line.length()];
 				int i = 0;
 				for(String word : line.split(" ")) {
 					System.out.println("Word: " + word);
 					if(!word.equals("") && word != null) {
 						System.out.println("Isn't empty!");
-						reconstruct[i] = word;
+						cmd[i] = word;
 						i++;
 					}
 				}
-				commands.add(reconstruct);
+				switch(cmd[0]) {
+				case "forward":
+					commands.add(new MoveForward(Double.parseDouble(cmd[1]), cmd[2], 0.5));
+					break;
+				case "backward":
+					commands.add(new MoveBackward(Double.parseDouble(cmd[1]), cmd[2], 0.5));
+					break;
+				case "turn":
+					commands.add(new Turn(Double.parseDouble(cmd[2]), cmd[3], cmd[1], TURN_SPEED));
+					break;
+				case "unload":
+					commands.add(new Unload());
+					break;
+				case "stop":
+				default:
+					commands.add(new Stop());
+				}
+				
 				//commands.add(line.split(" "));
 			}
 		}
 	}
 	
-	public MotionPath() {
-		in = new Scanner(path);
-	}
-	/**
-	 * Call this in a loop, because this does not have a loop function embedded
-	 * Or better yet, don't. Just slap it in the autonomous update and it should be fine
-	 */
-	public void interpret() {
-		if(commands.size() == 0)
-			return;
-		
-		String[] cmd = commands.remove(0);
-		String c = cmd[0].toLowerCase();
-		String extra = "";
-		
-		if(cmd[0].equals("stop") || (cmd.length == 0 && !cmd[0].equals("intake")))
-		{
-			Drive.getInstance().stop();
-			return;
-		}
-		
-		double dist = 0;
-		if(cmd.length > 1 && c != "shift")
-			dist = Double.parseDouble(cmd[1]);
-		if(cmd.length > 2 && c != "shift")
-			extra = cmd[2].toLowerCase();
-		else extra = cmd[1];
-		
-		if(extra == "ft")
-			if(c.equals("forward") || c.equals("reverse"))
-				dist *= 12;
-		
-		switch(c) {
-		case "forward":
-			if(cmd.length >= 2)
-				this.moveForward(dist, cmd[2], DEFAULT_SPEED);
-			break;
-		case "reverse":
-			if(cmd.length >= 2)
-				this.moveBackward(dist, cmd[2], DEFAULT_SPEED);
-			break;
-		case "turn":
-			if(cmd.length >= 3 && extra.equals("left"))
-				this.turnLeft(-dist, cmd[2], TURN_SPEED);
-			else
-				this.turnRight(dist, cmd[2], TURN_SPEED);
-			break;
-		case "unload":
-			Intake.getInstance().setRollers(-1);
-			Timer.delay(5);
+	
+	public void start() {
+		if (commands.size() == 0) {
+			Drive.getInstance().set(0, 0);
 			Intake.getInstance().setRollers(0);
-			break;
-		case "shift":
-			if(cmd.length >= 2) {
-				if(extra == "up")
-					Drive.getInstance().shift(1);
-				else
-					Drive.getInstance().shift(0);
-			}
-			break;
-		default:
-			Drive.getInstance().stop();
+		} else {
+			commands.get(0).init();
 		}
 	}
 	
-	public void moveForward(double dist, String unit, double speed)
-	{
-		if(unit.equals("ft"))
-			dist *= 12;
-		if(unit.equals("sec")){
-			driveTrain.set(speed, speed);
-			Timer.delay(dist);
-			driveTrain.stop();}
-		else
-			driveTrain.goDistance(dist, speed);
-	}
-	
-	public void moveBackward(double dist, String unit, double speed)
-	{
-		if(unit.equals("ft"))
-			dist *= 12;
-		if(unit.equals("sec")){
-			driveTrain.set(-speed, -speed);
-			Timer.delay(dist);
-			driveTrain.stop();}
-		else
-			driveTrain.goDistance(-dist, speed);
-	}
-	
-	public void turnRight(double dist, String unit, double speed)
-	{
-		if(unit.equals("sec")){
-			driveTrain.set(speed, -speed);
-			Timer.delay(dist);
-			driveTrain.stop();}
-		else
-			driveTrain.turnAngle(speed, dist);
-	}
-	
-	public void turnLeft(double dist, String unit, double speed)
-	{
-		if(unit.equals("sec")){
-			driveTrain.set(-speed, speed);
-			Timer.delay(dist);
-			driveTrain.stop();}
-		else
-			driveTrain.turnAngle(speed, -dist);
+	public void update() {
+		if (!started) {
+			start();
+			started = true;
+			System.out.println("Started");
+		} else {
+			if (commands.size() == 0) {
+				Drive.getInstance().set(0, 0);
+				Intake.getInstance().setRollers(0);
+				System.out.println("Out of commands");
+			} else {
+				PathComponent command = commands.get(0);
+				command.update();
+				if (command.isFinished()) {
+					System.out.println("Command finished");
+					Drive.getInstance().set(0, 0);
+					Intake.getInstance().setRollers(0);
+					commands.remove(0);
+					this.start();
+				}
+			}
+		}
 	}
 }
