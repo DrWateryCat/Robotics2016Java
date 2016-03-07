@@ -5,8 +5,6 @@ import java.util.Scanner;
 
 import org.usfirst.frc.team2186.robot.motionpaths.*;
 
-import edu.wpi.first.wpilibj.Timer;
-
 public class MotionPath {
 	Scanner in;
 	double DEFAULT_SPEED = 0.75, TURN_SPEED = 0.5;
@@ -14,8 +12,6 @@ public class MotionPath {
 	Drive driveTrain = Drive.getInstance();
 	
 	private boolean started = false;
-	
-	private String path = "stop;";
 	
 	private ArrayList<PathComponent> commands;
 	
