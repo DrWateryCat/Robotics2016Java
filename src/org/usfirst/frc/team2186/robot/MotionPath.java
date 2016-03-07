@@ -67,11 +67,17 @@ public class MotionPath {
 			extra = cmd[2].toLowerCase();
 		else extra = cmd[1];
 		
-		if(extra == "ft")
+		System.out.println(extra);
+		System.out.println(extra.equals("sec")+" "+extra.equals("ft"));
+		if(extra.equals("ft"))
+		{
 			if(c.equals("forward") || c.equals("reverse"))
 				dist *= 12;
-		else if(extra == "sec")
+		}
+		else if(extra.equals("sec")){
+			System.out.println("Enabling time-based action");
 			time = true;
+		}
 		
 		System.out.println("Parsing command: "+c);
 		
@@ -85,9 +91,9 @@ public class MotionPath {
 				Robot.stateMachine.changeState(StateMachine.BACKWARD, dist, time);
 			break;
 		case "turn":
-			if(cmd.length >= 3 && extra.equals("left"))
+			if(cmd.length >= 4 && cmd[3].equals("left"))
 				Robot.stateMachine.changeState(StateMachine.TURN_LEFT, dist, time);
-			else
+			else if(cmd.length >= 4)
 				Robot.stateMachine.changeState(StateMachine.TURN_RIGHT, dist, time);
 			break;
 		case "unload":

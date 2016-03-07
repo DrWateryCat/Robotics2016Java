@@ -33,11 +33,11 @@ public class StateMachine
 	{
 		//Essentially creates a countdown
 		if(time > 0){
-			if(startTime + time <= Timer.getMatchTime()){
-				System.out.println("Ending state, becoming STOPPED");
+			time += startTime - Timer.getFPGATimestamp();
+			System.out.println("Time remaining: "+time);
+			startTime = Timer.getFPGATimestamp();
+			if(time <= 0)
 				currentState = STOPPED;
-				time = 0;
-			}
 		}
 		
 		//Distance countdown!
@@ -51,7 +51,7 @@ public class StateMachine
 		}
 		
 		//Stop from going too far
-		if((distance <= 0 || time <= 0) && currentState != STOPPED)
+		if((distance <= 0 && time <= 0) && currentState != STOPPED)
 			currentState = STOPPED;
 		
 		//Actions!
@@ -93,7 +93,7 @@ public class StateMachine
 	//set "time" boolean to true for time-based state
 	public void changeState(int state, double units, boolean time)
 	{
-		System.out.println("New state: "+currentState+" "+units+" units length");
+		System.out.println("New state: "+state+" "+units+" units length, time = "+time);
 		changeState(state);
 		if(time)
 			changeTime(units);
@@ -112,9 +112,10 @@ public class StateMachine
 	
 	//Time is in seconds.
 	public void changeTime(double t){
+		System.out.println("Changing time to: "+t);
 		if(t < 0)
 			return;
 		time = t;
-		startTime = Timer.getMatchTime();
+		startTime = Timer.getFPGATimestamp();
 	}
 }
