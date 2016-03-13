@@ -116,7 +116,6 @@ public class Drive {
 			left = Utils.deadzone(j.getRawAxis(1));
 			right = Utils.deadzone(j.getRawAxis(3));
 			
-			set(left, right);
 		} else {
 			x = Utils.deadzone(j.getRawAxis(0));
 			y = Utils.deadzone(j.getRawAxis(1));
@@ -130,7 +129,7 @@ public class Drive {
 		else if(right > MAX_SPEED && left < MAX_SPEED)
 			set(left, MAX_SPEED);
 		else if(left > MAX_SPEED && right > MAX_SPEED)
-			set(MAX_SPEED, MAX_SPEED);
+			set(MAX_SPEED, -MAX_SPEED);
 		else
 			set(left, right);
 	}
@@ -140,9 +139,9 @@ public class Drive {
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 1);
 		if(driveType == DriveTypes.TANK_DRIVE) {
 			left = Utils.deadzone(j1.getRawAxis(1));
-			right = -Utils.deadzone(j2.getRawAxis(1));
+			right = Utils.deadzone(j2.getRawAxis(1));
 			
-			set(left, right);
+			//set(left, -right);
 		} else {
 			x = Utils.deadzone(j1.getRawAxis(0));
 			y = Utils.deadzone(j1.getRawAxis(1));

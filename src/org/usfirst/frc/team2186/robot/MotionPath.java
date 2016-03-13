@@ -47,7 +47,10 @@ public class MotionPath {
 	 */
 	public void interpret() {
 		if(commands.size() == 0)
+		{
+			Drive.getInstance().stop();
 			return;
+		}
 		
 		String[] cmd = commands.remove(0);
 		String c = cmd[0].toLowerCase();

@@ -47,13 +47,17 @@ public class Robot extends IterativeRobot {
     	//cs = CameraServer.getInstance();
     	//cs.setQuality(50);
     	//cs.startAutomaticCapture(cam0);
-    	
+    	SmartDashboard.putBoolean("isInAuto", false);
     }
     
     public void autonomousInit() {
-    	System.out.println(SmartDashboard.getString("AutoCode"));
+    	System.out.println(SmartDashboard.getString("AutoCode", "stop;"));
     	
-    	autonomous = new MotionPath(SmartDashboard.getString("AutoCode"));
+    	if((driver.getRawAxis(2)) > 0.7) {
+			autonomous = new MotionPath("forward 1 sec; stop;");
+		} else {
+			autonomous = new MotionPath("stop;");
+		}
     	stateMachine = new StateMachine();
     }
 
@@ -65,10 +69,13 @@ public class Robot extends IterativeRobot {
     		autonomous.interpret();
     	else
     		stateMachine.update();
+    	
+    	SmartDashboard.putBoolean("isInAuto", true);
     }
     
     public void teleopInit() {
     //	d.shift(0);
+    	SmartDashboard.putBoolean("isInAuto", false);
     }
 
     /**

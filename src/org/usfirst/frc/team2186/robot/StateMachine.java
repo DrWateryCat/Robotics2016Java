@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2186.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * @author gamrguy
@@ -31,7 +32,7 @@ public class StateMachine
 	
 	public void update()
 	{
-		//Essentially creates a countdown
+		//Time stopper
 		if(time > 0){
 			time += startTime - Timer.getFPGATimestamp();
 			System.out.println("Time remaining: "+time);
@@ -40,7 +41,7 @@ public class StateMachine
 				currentState = STOPPED;
 		}
 		
-		//Distance countdown!
+		//Distance stopper
 		if(distance > 0) {
 			if((Drive.getInstance().m_left.m_encoder.getDistance()+
 				Drive.getInstance().m_right.m_encoder.getDistance())/2 >= distance){
@@ -50,18 +51,18 @@ public class StateMachine
 			}
 		}
 		
-		//Stop from going too far
+		//Stop stopper
 		if((distance <= 0 && time <= 0) && currentState != STOPPED)
 			currentState = STOPPED;
 		
-		//Actions!
+		//Do things
 		System.out.println("Acting on state: "+currentState);
 		switch(currentState){
 		case FORWARD:
-			Drive.getInstance().set(Drive.MAX_SPEED, Drive.MAX_SPEED);
+			Drive.getInstance().set(-Drive.MAX_SPEED, -1);
 			break;
 		case BACKWARD:
-			Drive.getInstance().set(-Drive.MAX_SPEED, -Drive.MAX_SPEED);
+			Drive.getInstance().set(Drive.MAX_SPEED, Drive.MAX_SPEED);
 			break;
 		case TURN_LEFT:
 			Drive.getInstance().set(-Drive.MAX_SPEED, Drive.MAX_SPEED);
@@ -73,6 +74,9 @@ public class StateMachine
 			Drive.getInstance().stop();
 			currentState = STOPPED;
 		}
+		
+		SmartDashboard.putNumber("AutoState", currentState);
+		SmartDashboard.putNumber("AutoTime", time);
 	}
 	
 	public int getState()
