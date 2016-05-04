@@ -55,20 +55,22 @@ public class StateMachine
 		if((distance <= 0 && time <= 0) && currentState != STOPPED)
 			currentState = STOPPED;
 		
+		final double maxSpeed = Dashboard.getInstance().getMaxSpeed();
+		
 		//Do things
 		System.out.println("Acting on state: "+currentState);
 		switch(currentState){
 		case FORWARD:
-			Drive.getInstance().set(-Drive.MAX_SPEED, -1);
+			Drive.getInstance().set(-maxSpeed, -1);
 			break;
 		case BACKWARD:
-			Drive.getInstance().set(Drive.MAX_SPEED, Drive.MAX_SPEED);
+			Drive.getInstance().set(maxSpeed, maxSpeed);
 			break;
 		case TURN_LEFT:
-			Drive.getInstance().set(-Drive.MAX_SPEED, Drive.MAX_SPEED);
+			Drive.getInstance().set(-maxSpeed, maxSpeed);
 			break;
 		case TURN_RIGHT:
-			Drive.getInstance().set(Drive.MAX_SPEED, -Drive.MAX_SPEED);
+			Drive.getInstance().set(maxSpeed, -maxSpeed);
 			break;
 		default:
 			Drive.getInstance().stop();

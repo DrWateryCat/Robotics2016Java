@@ -17,6 +17,8 @@ public class Intake {
 	
 	DigitalInput out_limit;
 	
+	private double m_rollerSpeed;
+	
 	private Intake() {
 		m_linear = new VictorSP(RobotMap.Intake.LINEAR);
 		//m_rollers = new VictorSP(RobotMap.Intake.ROLLERS);
@@ -25,12 +27,23 @@ public class Intake {
 	}
 
 	public void setRollers(int state) {
-		if(state == 1)
-			m_linear.set(0.75);
-		else if(state == -1)
-			m_linear.set(-0.75);
-		else
+		double maxSpeed = Dashboard.getInstance().getConfig().getDouble("IntakeMaxSpeed", 1);
+		if(state == 1) {
+			m_linear.set(maxSpeed);
+			m_rollerSpeed = maxSpeed;
+		}
+		else if(state == -1) {
+			m_linear.set(-maxSpeed);
+			m_rollerSpeed = -maxSpeed;
+		}
+		else {
 			m_linear.set(0);
+			m_rollerSpeed = 0;
+		}
+	}
+	
+	public double getRollers() {
+		return m_rollerSpeed;
 	}
 	/**
 	public void moveIntake() {

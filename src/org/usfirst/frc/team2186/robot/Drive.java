@@ -9,13 +9,14 @@ public class Drive {
 		public static final int ARCADE_DRIVE = 1;
 	}
 	private static Drive _instance = null;
-	public static final double MAX_SPEED = .75;
 	public static Drive getInstance() {
 		if(_instance == null) {
 			_instance = new Drive();
 		}
 		return _instance;
 	}
+	
+	private double m_leftSpeed, m_rightSpeed;
 	
 	ShiftingSpeedController m_left;
 	ShiftingSpeedController m_right;
@@ -26,10 +27,12 @@ public class Drive {
 	
 	public void setRight(double val) {
 		m_right.set(-val);
+		m_rightSpeed = val;
 	}
 	
 	public void setLeft(double val) {
 		m_left.set(val);
+		m_leftSpeed = val;
 	}
 	
 	public void shiftLeft(int gear) {
@@ -46,69 +49,32 @@ public class Drive {
 	}
 	
 	public void set(double left, double right) {
-		setLeft(left);
-		setRight(right);
-	}
-	/** DEPRECATED
-	public void goDistance(double dist, double speed) {
-		double m_left_dist = 0, m_right_dist = 0;
-		
-		if(dist < 0)
-		{
-			set(-speed, -speed);
-			dist = -dist;
+		if(Dashboard.getInstance().getConfig().getBoolean("DriveEnabled", true)) {
+			setLeft(left);
+			setRight(right);
 		}
-		else
-			set(speed, speed);
-		
-		m_left.getEncoder().reset();
-		m_right.getEncoder().reset();
-		
-		while(Math.abs(m_left_dist) <= dist || Math.abs(m_right_dist) <= dist) {
-			m_left_dist = m_left.getEncoder().getDistance();
-			m_right_dist = m_right.getEncoder().getDistance();
-		}
-		stop();
 	}
-	*/
-	public void stop()
-	{
+	
+	public double getLeft() {
+		return m_leftSpeed;
+	}
+	
+	public double getRight() {
+		return m_rightSpeed;
+	}
+	
+	public void stop() {
 		set(0, 0);
 	}
 	
+	@Deprecated
 	//Resets the encoders.
-	public void reset()
-	{
+	public void reset() {
 		m_left.m_encoder.reset();
 		m_right.m_encoder.reset();
 	}
 	
-	/** DEPRECATED
-	public void turnAngle(double speed, double degrees)
-	{
-		if(degrees == 0)
-			return;
-		
-		//Turn right on positive angle, left on negative
-		if(degrees > 0)
-			set(speed, -speed);
-		else
-		{
-			degrees = -degrees; //can't be havin negative degrees now!
-			set(-speed, speed);
-		}
-		m_left.m_encoder.reset(); //resetti be mad nao mwahahahaha
-		m_right.m_encoder.reset();
-		
-		//just keep turnin until done turnin! looks stupid, but trust me IT ISN'T.
-		while(RobotMap.DriveTrain.TURNING_DEGREES_PER_PULSE*m_left.m_encoder.getRaw() < degrees ||
-			  RobotMap.DriveTrain.TURNING_DEGREES_PER_PULSE*m_right.m_encoder.getRaw() < degrees);
-		
-		//stop turnin.
-		stop();
-	}
-	*/
-	
+	@Deprecated
 	public void teleop(Joystick j) {
 		double left, right, x, y;
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 1);
@@ -124,18 +90,19 @@ public class Drive {
 			right = -(y - x);
 		}
 		
-		if(left > MAX_SPEED && right < MAX_SPEED)
-			set(MAX_SPEED, right);
-		else if(right > MAX_SPEED && left < MAX_SPEED)
-			set(left, MAX_SPEED);
-		else if(left > MAX_SPEED && right > MAX_SPEED)
-			set(MAX_SPEED, -MAX_SPEED);
-		else
-			set(left, right);
+		double maxLeft = Dashboard.getInstance().getConfig().getDouble("MaxLeftSpeed", 0.3);
+		double maxRight = Dashboard.getInstance().getConfig().getDouble("MaxRightSpeed", 0.3);
+		
+		left = Utils.clamp(left, -maxLeft, maxLeft);
+		right = Utils.clamp(right, -maxRight, maxRight);
+		
+		set(left, right);
 	}
 	
 	public void teleop(Joystick j1, Joystick j2) {
 		double left, right, x, y;
+		
+		//TODO: Get drive type switching working
 		int driveType = (int) SmartDashboard.getNumber("DriveType", 1);
 		if(driveType == DriveTypes.TANK_DRIVE) {
 			left = Utils.deadzone(j1.getRawAxis(1));
@@ -150,6 +117,8 @@ public class Drive {
 			right = y - x;
 		}
 		
+		//Max speed capping
+		/*
 		if(left > MAX_SPEED && right < MAX_SPEED)
 			set(MAX_SPEED, right);
 		else if(right > MAX_SPEED && left < MAX_SPEED)
@@ -158,5 +127,15 @@ public class Drive {
 			set(MAX_SPEED, MAX_SPEED);
 		else
 			set(left, right);
+		*/
+		
+		double maxLeft = Dashboard.getInstance().getConfig().getDouble("MaxLeftSpeed", 0.75);
+		double maxRight = Dashboard.getInstance().getConfig().getDouble("MaxRightSpeed", 0.75);
+		
+		left = Utils.clamp(left, -maxLeft, maxLeft);
+		right = Utils.clamp(right, -maxRight, maxRight);
+		
+		set(left, right);
+		
 	}
 }

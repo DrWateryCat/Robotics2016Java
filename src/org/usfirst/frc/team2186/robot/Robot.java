@@ -7,6 +7,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
+
+import java.io.IOException;
+
+import org.usfirst.frc.team2186.robot.Autonomous.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,6 +35,8 @@ public class Robot extends IterativeRobot {
 	
 	Intake i = Intake.getInstance();
 	
+	MacroPlay play;
+	MacroRecord record;
 	//DigitalOutput ledRing;
 	
 	//USBCamera cam0;
@@ -39,7 +46,7 @@ public class Robot extends IterativeRobot {
     	c = new Compressor();
     	c.start();
     	
-    	SmartDashboard.putNumber("DriveType", 0);
+    	SmartDashboard.putNumber("Auto Number", 0);
     	SmartDashboard.putBoolean("Rev", false);
     	//ledRing = new DigitalOutput(5);
     	
@@ -48,9 +55,12 @@ public class Robot extends IterativeRobot {
     	//cs.setQuality(50);
     	//cs.startAutomaticCapture(cam0);
     	SmartDashboard.putBoolean("isInAuto", false);
+    	
+    	Dashboard.getInstance().getConfig().putString("Robot", "Craig");
     }
     
     public void autonomousInit() {
+    	/*
     	System.out.println(SmartDashboard.getString("AutoCode", "stop;"));
     	
     	if((driver.getRawAxis(2)) > 0.7) {
@@ -59,16 +69,29 @@ public class Robot extends IterativeRobot {
 			autonomous = new MotionPath("stop;");
 		}
     	stateMachine = new StateMachine();
+    	*/
+    	
+    	try {
+    		play = new MacroPlay("/home/lvuser/auto" + SmartDashboard.getInt("Auto Number", 0) + ".csv");
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		System.out.println("You should probably record an autonomous first");
+    	}
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
+    	/*
     	if(stateMachine.getState() == StateMachine.STOPPED)
     		autonomous.interpret();
     	else
     		stateMachine.update();
+    	*/
+    	if(play != null) {
+    		play.play(Drive.getInstance());
+    	}
     	
     	SmartDashboard.putBoolean("isInAuto", true);
     }
@@ -76,12 +99,27 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
     //	d.shift(0);
     	SmartDashboard.putBoolean("isInAuto", false);
+    	if(play != null) {
+    		play.end(d);
+    	}
+    	
+    	try {
+			record = new MacroRecord("/home/lvuser/auto" + SmartDashboard.getInt("Auto Number", 0) + ".csv");
+		} catch (TableKeyNotDefinedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
-     * This function is called periodically during operator control
+     * This function is called periodically during operator controlakshay gets bitches*.
+     * *(Bitches means nothing)
      */
     int shift = 0;
+    boolean recording = false;
     public void teleopPeriodic() {
     	//ledRing.set(true);
     	
@@ -107,10 +145,40 @@ public class Robot extends IterativeRobot {
     		i.setRollers(-1);
     	else
     		i.setRollers(0);
+    	
+    	if(j.getRawButton(6) || driver.getRawButton(6)) {
+    		recording = !recording;
+    	}
+    	
+    	if(recording) {
+    		try {
+    			if(record != null) {
+    				record.record(d);
+    			}
+    		} catch(Exception e) {
+    			e.printStackTrace();
+    		}
+    	} else {
+    		try {
+				record.end();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
     
     public void disabledInit() {
     	i.setRollers(0);
+    	
+    	if(recording) {
+    		try {
+				record.end();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
     
     /**
